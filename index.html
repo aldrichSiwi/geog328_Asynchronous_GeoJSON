@@ -23,12 +23,23 @@
   }
 
   #side-panel {
-    flex-basis: 500px;
-    overflow-y: scroll;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px; /* you can adjust this */
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.95); /* slightly transparent white */
+    overflow-y: auto;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
   }
 
   #map {
-    flex-grow: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   button {
@@ -37,7 +48,6 @@
 
   table {
     border-collapse: collapse;
-    border-spacing: 0;
     width: 100%;
     border: 1px solid #ddd;
   }
@@ -51,52 +61,42 @@
   tr:nth-child(even) {
     background-color: #f2f2f2;
   }
+
+  @media (max-width: 1024px) {
+  #side-panel {
+    display: none;
+  }
+}
   </style>
 </head>
 
 
 <body>
-  <main id="container">
-    <div id="side-panel">
+  <div id="map">
 
-      <h2>Indonesia Earthquake List</h2>
-      <button>Sort by Magnitude</button>
+  </div>
 
-      <table>
-        <tr>
-          <th>id</th>
-          <th>magnitude</th>
-          <th>timestamp</th>
-        </tr>
-      </table>
+  <div id="side-panel">
+
+    <h2>Indonesia Earthquake List</h2>
+    <button>Sort by Magnitude</button>
+
+    <table>
+      <tr>
+        <th>id</th>
+        <th>magnitude</th>
+        <th>timestamp</th>
+      </tr>
+    </table>
 
     </div>
-
-    <div id="map">
-
-    </div>
-  </main>
 
   <script>
     const map = new maplibregl.Map({
       container: 'map', // container id
       center: [118, -2], // starting position [lng, lat]
       zoom: 3.5, // starting zoom
-      style: {
-        "version": 8,
-        "sources": {
-          "satellite": {
-            "type": "raster",
-            "tiles": ["https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg"],
-            "tileSize": 256
-          }
-        },
-        "layers": [{
-          "id": "satellite",
-          "type": "raster",
-          "source": "satellite"
-        }]
-      }
+      style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
     });
 
     async function geojsonFetch() {
